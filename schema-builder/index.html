@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Конструктор схем электрощитов | Электрик Солнечногорск</title>
+    <meta name="description" content="Бесплатный онлайн конструктор схем электрощитов. Создайте и скачайте схему вашего электрощита в формате изображения.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/schema-builder.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">Конструктор схем</span>
+                        <span class="logo-city">Электрощитов</span>
+                    </div>
+                </a>
+                <a href="../index.html" class="header-phone">
+                    <i class="fas fa-home"></i>
+                    <span class="phone-text">На главную</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="schema-builder">
+        <div class="container">
+            <div class="builder-header">
+                <h1>Конструктор схем электрощитов</h1>
+                <p class="subtitle">Создайте схему вашего электрощита и скачайте в формате изображения</p>
+                
+                <div class="controls-panel">
+                    <div class="control-group">
+                        <label for="rowsCount">Рядов:</label>
+                        <input type="number" id="rowsCount" min="1" max="8" value="3">
+                    </div>
+                    <div class="control-group">
+                        <label for="columnsCount">Ячеек в ряду:</label>
+                        <input type="number" id="columnsCount" min="1" max="15" value="10">
+                    </div>
+                    <button id="createSchema" class="btn-primary">
+                        <i class="fas fa-plus"></i> Создать схему
+                    </button>
+                </div>
+            </div>
+
+            <div class="builder-container">
+                <!-- Панель инструментов -->
+                <div class="tools-panel" id="toolsPanel">
+                    <div class="tool-section">
+                        <h3><i class="fas fa-puzzle-piece"></i> Автоматы</h3>
+                        <div class="tool-items">
+                            <button class="tool-btn" data-type="1" data-width="1">
+                                <div class="breaker-single">1P</div>
+                                Одинарный
+                            </button>
+                            <button class="tool-btn" data-type="2" data-width="2">
+                                <div class="breaker-double">2P</div>
+                                Двойной
+                            </button>
+                            <button class="tool-btn" data-type="3" data-width="3">
+                                <div class="breaker-triple">3P</div>
+                                Тройной
+                            </button>
+                            <button class="tool-btn" data-type="rcd">
+                                <div class="breaker-rcd">УЗО</div>
+                                УЗО/Диф
+                            </button>
+                            <button class="tool-btn" id="clearBtn">
+                                <i class="fas fa-trash"></i>
+                                Очистить ячейку
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3><i class="fas fa-palette"></i> Цвета</h3>
+                        <div class="color-picker">
+                            <button class="color-btn" style="background: #ffffff;" data-color="#ffffff" data-text="Черный"></button>
+                            <button class="color-btn" style="background: #ffeb3b;" data-color="#ffeb3b" data-text="Черный"></button>
+                            <button class="color-btn" style="background: #4CAF50;" data-color="#4CAF50" data-text="Белый"></button>
+                            <button class="color-btn" style="background: #2196F3;" data-color="#2196F3" data-text="Белый"></button>
+                            <button class="color-btn" style="background: #ff9800;" data-color="#ff9800" data-text="Черный"></button>
+                            <button class="color-btn" style="background: #9C27B0;" data-color="#9C27B0" data-text="Белый"></button>
+                            <button class="color-btn" style="background: #795548;" data-color="#795548" data-text="Белый"></button>
+                            <button class="color-btn" style="background: #607D8B;" data-color="#607D8B" data-text="Белый"></button>
+                        </div>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3><i class="fas fa-font"></i> Текст</h3>
+                        <textarea id="breakerText" placeholder="Введите описание модуля...&#10;Пример:&#10;• Розетки кухня (3 шт)&#10;• Вытяжка&#10;• Посудомоечная машина&#10;• Холодильник" rows="4"></textarea>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3><i class="fas fa-bolt"></i> Фаза</h3>
+                        <div class="phase-selector">
+                            <button class="phase-btn" data-phase="L1">L1</button>
+                            <button class="phase-btn" data-phase="L2">L2</button>
+                            <button class="phase-btn" data-phase="L3">L3</button>
+                            <button class="phase-btn" data-phase="N">N</button>
+                        </div>
+                    </div>
+
+                    <div class="tool-section">
+                        <h3><i class="fas fa-sliders-h"></i> Действия</h3>
+                        <div class="action-buttons">
+                            <button id="saveSchema" class="btn-success">
+                                <i class="fas fa-download"></i> Сохранить схему
+                            </button>
+                            <button id="clearSchema" class="btn-danger">
+                                <i class="fas fa-broom"></i> Очистить всё
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Холст для схемы -->
+                <div class="schema-canvas-container">
+                    <div class="canvas-header">
+                        <h3><i class="fas fa-th"></i> Схема электрощита</h3>
+                        <div class="canvas-info">
+                            <span>Кликните на ячейку чтобы разместить модуль</span>
+                        </div>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <table class="schema-table" id="schemaTable">
+                            <tbody id="gridBody">
+                                <!-- Схема будет генерироваться здесь -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" id="emptyState">
+                        <i class="fas fa-plug"></i>
+                        <p>Нажмите "Создать схему" чтобы начать</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Инструкция -->
+            <div class="instructions">
+                <h2><i class="fas fa-info-circle"></i> Как пользоваться конструктором</h2>
+                <div class="instructions-grid">
+                    <div class="instruction-card">
+                        <div class="instruction-icon">
+                            <i class="fas fa-th"></i>
+                        </div>
+                        <h3>1. Создайте сетку</h3>
+                        <p>Укажите количество рядов и ячеек в ряду для вашего электрощита</p>
+                    </div>
+                    <div class="instruction-card">
+                        <div class="instruction-icon">
+                            <i class="fas fa-mouse-pointer"></i>
+                        </div>
+                        <h3>2. Добавьте автоматы</h3>
+                        <p>Выберите тип автомата и кликните на ячейку для его размещения</p>
+                    </div>
+                    <div class="instruction-card">
+                        <div class="instruction-icon">
+                            <i class="fas fa-font"></i>
+                        </div>
+                        <h3>3. Подпишите</h3>
+                        <p>Добавьте описания и выберите цвета для удобной идентификации</p>
+                    </div>
+                    <div class="instruction-card">
+                        <div class="instruction-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>4. Сохраните</h3>
+                        <p>Скачайте готовую схему в формате PNG для печати или хранения</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-title">Электромонтаж</span>
+                            <span class="logo-city">Солнечногорск</span>
+                        </div>
+                    </a>
+                    <p class="footer-description">Профессиональные электромонтажные работы в Солнечногорске и Солнечногорском районе</p>
+                </div>
+                
+                <div class="footer-nav">
+                    <h3>Контакты</h3>
+                    <a href="tel:+79853312424" class="footer-link">
+                        <i class="fas fa-phone"></i>
+                        +7 (985) 331-24-24
+                    </a>
+                    <p class="footer-link">
+                        <i class="fas fa-clock"></i>
+                        Ежедневно 8:00 - 21:00
+                    </p>
+                </div>
+                
+                <div class="footer-nav">
+                    <h3>Навигация</h3>
+                    <a href="../index.html" class="footer-link">Главная страница</a>
+                    <a href="index.html" class="footer-link">Конструктор схем</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© <span id="currentYear"></span> Электромонтаж Солнечногорск. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/schema-builder.js"></script>
+</body>
+</html>
