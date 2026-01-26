@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Электромонтаж Солнечногорск - профессиональный электромонтаж, установка розеток, выключателей</title>
+    <meta name="description"
+        content="Услуги электрика в Солнечногорске. Установка розеток, выключателей, щитков, замена проводки. Быстрый выезд мастера.">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/gallery-modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Шапка -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">Электромонтаж</span>
+                        <span class="logo-city">Солнечногорск</span>
+                    </div>
+                </div>
+                <a href="tel:+79853312424" class="header-phone">
+                    <i class="fas fa-phone"></i>
+                    <span class="phone-text">+7 (985) 331-24-24</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Главный баннер -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Профессиональный электромонтаж в Солнечногорске</h1>
+                    <p class="hero-subtitle">Установка и замена розеток, выключателей, щитков. Полностью или частично
+                        меняем проводку.</p>
+                    <div class="hero-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>1 год гарантия на работы</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-users"></i>
+                            <span>Профессиональная команда электриков</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-clock"></i>
+                            <span>Работаем с 8:00 до 21:00</span>
+                        </div>
+                    </div>
+                    <a href="#form" class="hero-button">
+                        <i class="fas fa-bolt"></i>
+                        Вызвать электрика
+                    </a>
+                </div>
+                <div class="hero-image">
+                    <img src="https://ir.ozone.ru/s3/multimedia-1-u/7552819866.jpg" alt="Электромонтажные работы">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Галерея -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Наши работы</h2>
+                <p>Примеры выполненных электромонтажных работ</p>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery-wrapper">
+                    <div class="gallery-grid" id="galleryGrid">
+                    </div>
+                </div>
+
+                <div class="gallery-controls">
+                    <button class="gallery-arrow prev" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="gallery-dots" id="dotsContainer">
+                    </div>
+                    <button class="gallery-arrow next" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Услуги -->
+    <section class="services-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Наши услуги</h2>
+                <p>Выполняем все виды электромонтажных работ</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Установка розеток</h3>
+                        <p>Монтаж, замена, перенос розеток любых типов</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-toggle-on"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Установка выключателей</h3>
+                        <p>Одноклавишные, двухклавишные, проходные выключатели</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Монтаж электрощитов</h3>
+                        <p>Сборка и установка распределительных щитков</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Замена проводки</h3>
+                        <p>Полная или частичная замена электропроводки</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Форма -->
+    <section class="form-section" id="form">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-content">
+                    <h2 class="form-title">Оставить заявку</h2>
+                    <p class="form-subtitle">Мы перезвоним вам в течение 1 часа для уточнения деталей</p>
+
+                    <form id="requestForm">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Ваше имя" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="tel" id="phone" placeholder="Ваш телефон" required>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Что нужно сделать? (необязательно)"></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Вызвать электрика
+                        </button>
+
+                        <p class="form-note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
+                    </form>
+                </div>
+
+                <div class="form-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Звоните прямо сейчас</h3>
+                            <a href="tel:+79853312424">+7 (985) 331-24-24</a>
+                            <p>Ежедневно с 8:00 до 21:00</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Быстрый выезд</h3>
+                            <p>Приезжаем в течение 2 часов после заявки</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Гарантия качества</h3>
+                            <p>Даем гарантию на все выполненные работы</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-title">Электромонтаж</span>
+                            <span class="logo-city">Солнечногорск</span>
+                        </div>
+                    </div>
+                    <p class="footer-description">Профессиональные электромонтажные работы в Солнечногорске и
+                        Солнечногорском районе</p>
+                </div>
+
+                <div class="footer-nav">
+                    <h3>Контакты</h3>
+                    <a href="tel:+9853312424" class="footer-link">
+                        <i class="fas fa-phone"></i>
+                        +7 (985) 331-24-24
+                    </a>
+                    <p class="footer-link">
+                        <i class="fas fa-clock"></i>
+                        Ежедневно 8:00 - 21:00
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p><span id="currentYear"></span> Электромонтаж Солнечногорск.</p>
+            </div>
+        </div>
+        <div class="dg-signature">
+            <a href="https://digital-greatness.ru" target="_blank" rel="noopener" class="dg-signature-link">
+                <div class="dg-logo-circle">
+                    <span class="dg-logo">DG</span>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-made-by">Создание сайта</div>
+                    <div class="dg-name">Digital Greatness</div>
+                </div>
+            </a>
+        </div>
+    </footer>
+
+    <div class="modal" id="successModal">
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3 class="modal-title">Заявка отправлена!</h3>
+                <p class="modal-text">Электрик перезвонит вам в течение 60 минут</p>
+                <button class="modal-btn" id="closeModal">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-modal" id="galleryModal">
+        <div class="gallery-modal-overlay">
+            <div class="gallery-modal-content">
+                <button class="gallery-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="gallery-modal-image-container">
+                    <img src="" alt="" class="gallery-modal-image">
+                </div>
+                <button class="gallery-modal-prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="gallery-modal-next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
