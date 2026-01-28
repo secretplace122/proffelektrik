@@ -1,10 +1,11 @@
 class SchemaBuilder {
     constructor() {
-        this.selectedType = '1'; // single
+        this.selectedType = '1';
         this.selectedColor = '#ffffff';
         this.selectedText = '';
         this.selectedPhase = 'L1';
-        this.gridState = []; // Состояние только для стартовых ячеек
+        this.gridState = [];
+        this.isMobile = window.innerWidth <= 1024;
         
         this.gridBody = document.getElementById('gridBody');
         this.schemaTable = document.getElementById('schemaTable');
@@ -15,10 +16,9 @@ class SchemaBuilder {
         this.saveBtn = document.getElementById('saveSchema');
         this.clearBtn = document.getElementById('clearSchema');
         this.textArea = document.getElementById('breakerText');
-        this.clearCellBtn = document.getElementById('clearBtn');
         
-        this.cellWidth = 80;
-        this.cellHeight = 80;
+        this.cellWidth = this.isMobile ? 40 : 70;
+        this.cellHeight = this.isMobile ? 40 : 70;
         
         this.init();
     }
@@ -26,38 +26,30 @@ class SchemaBuilder {
     init() {
         this.bindEvents();
         this.loadFromStorage();
-        this.updateYear();
         this.setupPhaseSelector();
         this.updateToolSelection();
         this.updateColorSelection();
+        this.createMobileSaveButton();
+    }
+    
+    createMobileSaveButton() {
+        if (this.isMobile) {
+            const mobileSaveBtn = document.createElement('button');
+            mobileSaveBtn.className = 'mobile-save-btn';
+            mobileSaveBtn.innerHTML = '<i class="fas fa-download"></i>';
+            mobileSaveBtn.title = 'Сохранить схему';
+            mobileSaveBtn.addEventListener('click', () => this.saveAsImage());
+            document.body.appendChild(mobileSaveBtn);
+        }
     }
     
     bindEvents() {
-        // Создание схемы
         this.createBtn.addEventListener('click', () => this.createSchema());
-        
-        // Сохранение схемы
         this.saveBtn.addEventListener('click', () => this.saveAsImage());
-        
-        // Очистка схемы
         this.clearBtn.addEventListener('click', () => {
-            if (confirm('Очистить всю схему?')) {
-                this.clearSchema();
-            }
+            if (confirm('Очистить всю схему?')) this.clearSchema();
         });
         
-        // Очистка ячейки
-        this.clearCellBtn.addEventListener('click', () => {
-            this.selectedType = 'clear';
-            this.updateToolSelection();
-        });
-        
-        // Ввод текста
-        this.textArea.addEventListener('input', (e) => {
-            this.selectedText = e.target.value;
-        });
-        
-        // Выбор инструмента
         document.querySelectorAll('.tool-btn[data-type]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 this.selectedType = e.currentTarget.dataset.type;
@@ -65,12 +57,15 @@ class SchemaBuilder {
             });
         });
         
-        // Выбор цвета
         document.querySelectorAll('.color-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 this.selectedColor = e.currentTarget.dataset.color;
                 this.updateColorSelection();
             });
+        });
+        
+        this.textArea.addEventListener('input', (e) => {
+            this.selectedText = e.target.value;
         });
     }
     
@@ -90,9 +85,7 @@ class SchemaBuilder {
         });
         
         const activeBtn = document.querySelector(`.tool-btn[data-type="${this.selectedType}"]`);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
-        }
+        if (activeBtn) activeBtn.classList.add('active');
     }
     
     updateColorSelection() {
@@ -108,33 +101,35 @@ class SchemaBuilder {
         const rows = Math.min(parseInt(this.rowsInput.value) || 3, 8);
         const cols = Math.min(parseInt(this.columnsInput.value) || 10, 15);
         
-        // Скрываем пустое состояние
         this.emptyState.style.display = 'none';
         this.schemaTable.style.display = 'table';
-        
-        // Очищаем таблицу
         this.gridBody.innerHTML = '';
         this.gridState = Array.from({ length: rows }, () => Array(cols).fill(null));
         
-        // Создаем ряды
         for (let r = 0; r < rows; r++) {
             const row = document.createElement('tr');
             
-            // Создаем ячейки в ряду
             for (let c = 0; c < cols; c++) {
                 const cell = document.createElement('td');
                 cell.dataset.row = r;
                 cell.dataset.col = c;
-                cell.dataset.index = `${String.fromCharCode(65 + r)}${c + 1}`;
                 
-                // Добавляем индекс ячейки
                 const index = document.createElement('div');
                 index.className = 'cell-index';
                 index.textContent = `${String.fromCharCode(65 + r)}${c + 1}`;
                 cell.appendChild(index);
                 
-                // Настройка событий
-                this.setupCellEvents(cell, r, c);
+                cell.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.handleCellAction(r, c);
+                });
+                
+                cell.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.handleCellAction(r, c);
+                }, { passive: false });
                 
                 row.appendChild(cell);
             }
@@ -142,76 +137,50 @@ class SchemaBuilder {
             this.gridBody.appendChild(row);
         }
         
-        // Устанавливаем фиксированную ширину таблицы
         this.schemaTable.style.width = `${cols * this.cellWidth}px`;
-        this.schemaTable.style.tableLayout = 'fixed'; // Важно!
-        
-        // Фиксируем ширину ячеек
         const cells = this.gridBody.querySelectorAll('td');
         cells.forEach(cell => {
             cell.style.width = `${this.cellWidth}px`;
-            cell.style.minWidth = `${this.cellWidth}px`;
-            cell.style.maxWidth = `${this.cellWidth}px`;
+            cell.style.height = `${this.cellHeight}px`;
         });
         
         this.saveToStorage();
     }
     
-    setupCellEvents(cell, row, col) {
-        // Для десктопа
-        cell.addEventListener('click', (e) => {
-            if (this.selectedType === 'clear') {
-                this.clearModule(row, col);
-            } else {
-                this.placeModule(row, col);
-            }
-        });
+    handleCellAction(row, col) {
+        const module = this.gridState[row][col];
         
-        // Для мобильных
-        cell.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-        
-        cell.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            if (this.selectedType === 'clear') {
-                this.clearModule(row, col);
-            } else {
-                this.placeModule(row, col);
+        if (module) {
+            this.clearModule(row, col);
+            if (this.selectedType !== 'clear') {
+                setTimeout(() => {
+                    this.placeModule(row, col);
+                }, 10);
             }
-        }, { passive: false });
+        } else {
+            this.placeModule(row, col);
+        }
     }
     
     placeModule(row, col) {
         const width = this.selectedType === 'rcd' ? 1 : parseInt(this.selectedType) || 1;
-        
-        // Проверяем, не выходим ли за границы
         const cols = parseInt(this.columnsInput.value);
+        
         if (col + width > cols) {
-            alert(`Недостаточно места! Нужно ${width} ячеек, доступно ${cols - col}`);
             return;
         }
         
-        // Проверяем, не заняты ли ячейки
         for (let c = col; c < col + width; c++) {
             if (this.gridState[row][c] !== null) {
-                alert('Ячейки заняты! Очистите их сначала.');
-                return;
+                this.clearModule(row, c);
             }
         }
         
-        // Если на этой позиции уже есть модуль, очищаем его
-        if (this.gridState[row][col] !== null) {
-            this.clearModule(row, col);
-        }
-        
-        // Создаем новый модуль
         this.createModule(row, col, width);
         this.saveToStorage();
     }
     
     createModule(row, col, width) {
-        // Создаем данные модуля
         const moduleData = {
             type: this.selectedType,
             width: width,
@@ -222,65 +191,35 @@ class SchemaBuilder {
             row: row
         };
         
-        // Заполняем состояние
         for (let c = col; c < col + width; c++) {
             this.gridState[row][c] = moduleData;
         }
-        
-        // Очищаем отображение всех ячеек модуля
+
         for (let c = col; c < col + width; c++) {
             const cell = this.getCell(row, c);
             if (cell) {
                 cell.innerHTML = '';
-                cell.classList.remove('has-module');
                 cell.classList.add('has-module');
-                
-                // Для визуального объединения убираем границы между ячейками
-                if (c > col) {
-                    cell.style.borderLeft = 'none';
-                }
             }
         }
         
-        // Создаем визуальное объединение в стартовой ячейке
         const startCell = this.getCell(row, col);
         if (!startCell) return;
         
-        // Создаем контейнер модуля
         const module = document.createElement('div');
-        module.className = `grid-module ${width === 1 ? 'single' : width === 2 ? 'double' : 'triple'}`;
-        
-        // Устанавливаем цвет
-        if (this.selectedType === 'rcd') {
-            module.style.backgroundColor = '#2196F3';
-            module.classList.add('rcd');
-        } else {
-            module.style.backgroundColor = this.selectedColor;
-        }
-        
+        module.className = `grid-module ${this.selectedType === 'rcd' ? 'rcd' : ''}`;
         module.dataset.width = width;
-        module.dataset.startCol = col;
         module.style.width = `${this.cellWidth * width}px`;
-        module.style.left = '0';
-        module.style.position = 'absolute';
-        module.style.zIndex = '1';
+        module.style.backgroundColor = moduleData.color;
         
-        // Определяем цвет текста
-        let textColor = '#000000';
-        if (this.selectedType === 'rcd') {
-            textColor = '#ffffff';
-        } else {
-            textColor = this.getTextColor(this.selectedColor);
-        }
+        const textColor = this.getTextColor(moduleData.color);
         
-        // Добавляем фазу
         const phaseBadge = document.createElement('div');
         phaseBadge.className = 'phase-badge';
         phaseBadge.textContent = this.selectedPhase;
         phaseBadge.style.color = textColor;
         module.appendChild(phaseBadge);
         
-        // Добавляем содержимое
         const content = document.createElement('div');
         content.className = 'module-content';
         
@@ -295,16 +234,10 @@ class SchemaBuilder {
         module.appendChild(content);
         startCell.appendChild(module);
         
-        // Делаем ячейку позиционированной
-        startCell.style.position = 'relative';
-        startCell.style.overflow = 'visible';
-        
-        // Прячем содержимое в остальных ячейках модуля
         for (let c = col + 1; c < col + width; c++) {
             const cell = this.getCell(row, c);
             if (cell) {
-                cell.innerHTML = '';
-                cell.style.overflow = 'hidden';
+                cell.style.borderLeft = 'none';
             }
         }
     }
@@ -315,29 +248,21 @@ class SchemaBuilder {
         
         const { startCol, width } = module;
         
-        // Очищаем состояние
         for (let c = startCol; c < startCol + width; c++) {
             this.gridState[row][c] = null;
         }
         
-        // Восстанавливаем все ячейки модуля
         for (let c = startCol; c < startCol + width; c++) {
             const cell = this.getCell(row, c);
             if (cell) {
                 cell.innerHTML = '';
                 cell.classList.remove('has-module');
                 cell.style.borderLeft = '';
-                cell.style.position = '';
-                cell.style.overflow = '';
                 
-                // Добавляем индекс
                 const index = document.createElement('div');
                 index.className = 'cell-index';
                 index.textContent = `${String.fromCharCode(65 + row)}${c + 1}`;
                 cell.appendChild(index);
-                
-                // Восстанавливаем обработчики
-                this.setupCellEvents(cell, row, c);
             }
         }
         
@@ -345,29 +270,31 @@ class SchemaBuilder {
     }
     
     getCell(row, col) {
-        return document.querySelector(`td[data-row="${row}"][data-col="${col}"]`);
+        return this.gridBody.querySelector(`td[data-row="${row}"][data-col="${col}"]`);
     }
     
     getTextColor(backgroundColor) {
         try {
             const hex = backgroundColor.replace('#', '');
+            let r, g, b;
+            
             if (hex.length === 3) {
-                const r = parseInt(hex[0] + hex[0], 16);
-                const g = parseInt(hex[1] + hex[1], 16);
-                const b = parseInt(hex[2] + hex[2], 16);
-                const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-                return brightness > 128 ? '#000000' : '#ffffff';
+                r = parseInt(hex[0] + hex[0], 16);
+                g = parseInt(hex[1] + hex[1], 16);
+                b = parseInt(hex[2] + hex[2], 16);
             } else if (hex.length === 6) {
-                const r = parseInt(hex.substr(0, 2), 16);
-                const g = parseInt(hex.substr(2, 2), 16);
-                const b = parseInt(hex.substr(4, 2), 16);
-                const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-                return brightness > 128 ? '#000000' : '#ffffff';
+                r = parseInt(hex.substr(0, 2), 16);
+                g = parseInt(hex.substr(2, 2), 16);
+                b = parseInt(hex.substr(4, 2), 16);
+            } else {
+                return '#000000';
             }
+            
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness > 128 ? '#000000' : '#ffffff';
         } catch (e) {
-            console.error('Ошибка определения цвета текста:', e);
+            return '#000000';
         }
-        return '#000000';
     }
     
     clearSchema() {
@@ -375,7 +302,6 @@ class SchemaBuilder {
         this.gridState = [];
         this.schemaTable.style.display = 'none';
         this.emptyState.style.display = 'flex';
-        
         localStorage.removeItem('electricalSchema');
     }
     
@@ -385,7 +311,6 @@ class SchemaBuilder {
             return;
         }
         
-        // Получаем размеры таблицы
         const rows = this.gridBody.children.length;
         const cols = this.gridBody.children[0]?.children.length || 0;
         
@@ -394,44 +319,29 @@ class SchemaBuilder {
             return;
         }
         
-        // Рассчитываем размеры для A4 (1123x794 пикселей)
-        const a4Width = 1123;
-        const a4Height = 794;
-        
-        // Создаем canvas для рендеринга
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         
-        // Устанавливаем размеры canvas для A4
+        const a4Width = 1123;
+        const a4Height = 794;
         canvas.width = a4Width;
         canvas.height = a4Height;
         
-        // Заполняем фон белым
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, a4Width, a4Height);
         
-        // Рассчитываем отступы
         const margin = 50;
         const availableWidth = a4Width - margin * 2;
         const availableHeight = a4Height - margin * 2 - 60;
-        
-        // Рассчитываем размеры ячеек
-        const cellSize = Math.min(
-            availableWidth / cols,
-            availableHeight / rows
-        );
-        
-        // Начальные координаты
+        const cellSize = Math.min(availableWidth / cols, availableHeight / rows);
         const startX = margin + (availableWidth - cols * cellSize) / 2;
         const startY = margin + 60 + (availableHeight - rows * cellSize) / 2;
         
-        // Рисуем ЗАГОЛОВОК
         ctx.fillStyle = '#333333';
         ctx.font = 'bold 28px Montserrat, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Схема электрощита', a4Width / 2, margin + 30);
         
-        // Рисуем модули
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const module = this.gridState[r][c];
@@ -443,50 +353,34 @@ class SchemaBuilder {
             }
         }
         
-        // Конвертируем canvas в изображение
-        canvas.toBlob((blob) => {
-            if (!blob) {
-                alert('Ошибка создания изображения');
-                return;
-            }
-            
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            const dateStr = new Date().toISOString().slice(0,10);
-            
-            link.href = url;
-            link.download = `схема-электрощита-${dateStr}.png`;
-            link.style.display = 'none';
-            
-            document.body.appendChild(link);
-            link.click();
-            
-            // Очистка
-            setTimeout(() => {
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            }, 100);
-            
-            alert('Схема успешно сохранена в формате PNG!');
-        }, 'image/png', 1.0);
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `схема-электрощита-${new Date().toISOString().slice(0,10)}.png`;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(link);
+        }, 100);
+        
+        if (!this.isMobile) {
+            alert('Схема успешно сохранена!');
+        }
     }
     
     drawModule(ctx, x, y, cellSize, module) {
         const { type, width, color, phase, text } = module;
-        
-        // Рассчитываем размер модуля
         const moduleWidth = cellSize * width;
         
-        // Рисуем фон модуля
         ctx.fillStyle = color;
         ctx.fillRect(x, y, moduleWidth, cellSize);
         
-        // Рисуем тонкую черную рамку
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
         ctx.strokeRect(x, y, moduleWidth, cellSize);
         
-        // Рисуем разделители для многополюсных автоматов
         if (width > 1) {
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
             ctx.lineWidth = 1;
@@ -499,17 +393,14 @@ class SchemaBuilder {
             }
         }
         
-        // Определяем цвет текста
         const textColor = this.getTextColor(color);
         
-        // Рисуем фазу в правом верхнем углу
         ctx.fillStyle = textColor;
         ctx.font = 'bold 12px Roboto, sans-serif';
         ctx.textAlign = 'right';
         ctx.textBaseline = 'top';
         ctx.fillText(phase, x + moduleWidth - 5, y + 5);
         
-        // Рисуем текст модуля
         const displayText = text || (type === 'rcd' ? 'УЗО' : `${width}P автомат`);
         
         ctx.fillStyle = textColor;
@@ -517,7 +408,6 @@ class SchemaBuilder {
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         
-        // Разбиваем текст на строки
         const lines = this.wrapText(ctx, displayText, moduleWidth - 20);
         const lineHeight = 14;
         const startY = y + cellSize / 2 - (lines.length * lineHeight) / 2 + lineHeight / 2;
@@ -556,17 +446,14 @@ class SchemaBuilder {
     }
     
     saveToStorage() {
-        // Сохраняем только уникальные модули
         const savedState = [];
         const rows = this.gridState.length;
         const cols = this.gridState[0]?.length || 0;
         
-        // Создаем пустое состояние
         for (let r = 0; r < rows; r++) {
             savedState[r] = Array(cols).fill(null);
         }
         
-        // Заполняем только стартовые ячейки
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const module = this.gridState[r][c];
@@ -592,29 +479,23 @@ class SchemaBuilder {
                 this.rowsInput.value = data.rows || 3;
                 this.columnsInput.value = data.cols || 10;
                 
-                // Создаем схему
                 this.createSchema();
                 
-                // Восстанавливаем модули
                 if (data.gridState) {
                     setTimeout(() => {
                         for (let r = 0; r < data.gridState.length; r++) {
                             for (let c = 0; c < data.gridState[r].length; c++) {
                                 const module = data.gridState[r][c];
                                 if (module) {
-                                    // Восстанавливаем настройки
                                     this.selectedType = module.type;
                                     this.selectedColor = module.color;
                                     this.selectedPhase = module.phase || 'L1';
                                     this.selectedText = module.text || '';
-                                    
-                                    // Восстанавливаем модуль
                                     this.createModule(r, c, module.width);
                                 }
                             }
                         }
                         
-                        // Сбрасываем настройки
                         this.selectedType = '1';
                         this.selectedColor = '#ffffff';
                         this.selectedText = '';
@@ -627,22 +508,16 @@ class SchemaBuilder {
             }
         }
     }
-    
-    updateYear() {
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-    }
 }
 
-// Инициализация
 document.addEventListener('DOMContentLoaded', () => {
-    const builder = new SchemaBuilder();
+    new SchemaBuilder();
     
-    // Анимация логотипа
-    setTimeout(() => {
-        const logoIcon = document.querySelector('.logo-icon');
-        if (logoIcon) {
-            logoIcon.classList.add('animate');
-            setTimeout(() => logoIcon.classList.remove('animate'), 1800);
+    const homeLink = document.querySelector('.header-phone');
+    if (homeLink) {
+        const icon = homeLink.querySelector('i');
+        if (icon) {
+            icon.style.display = 'inline-block';
         }
-    }, 800);
+    }
 });

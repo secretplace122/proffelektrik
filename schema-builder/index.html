@@ -1,15 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=106507106', 'ym');
+
+        ym(106507106, 'init', { ssr: true, webvisor: true, clickmap: true, ecommerce: "dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce: true, trackLinks: true });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/106507106" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
     <title>Конструктор схем электрощитов | Электрик Солнечногорск</title>
-    <meta name="description" content="Бесплатный онлайн конструктор схем электрощитов. Создайте и скачайте схему вашего электрощита в формате изображения.">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/schema-builder.css">
+    <meta name="description" content="⚡ Бесплатный онлайн конструктор схем электрощитов. Создайте и скачайте схему вашего электрощита. Услуги электрика в Солнечногорске.">
+    
+    <meta name="keywords" content="конструктор схем электрощитов, схема электрощита онлайн, сборка электрощита, электрощит проект, электрическая схема, автоматы УЗО, электрик Солнечногорск, электромонтаж, электрощиток, электрик на дом, электрик срочно, вызов электрика, электромонтажные работы">
+    
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Электрик Солнечногорск">
+    
+    <meta name="geo.region" content="RU-MOS">
+    <meta name="geo.placename" content="Солнечногорск">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/schema-builder.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <!-- Шапка -->
     <header class="header">
@@ -25,7 +55,7 @@
                     </div>
                 </a>
                 <a href="../index.html" class="header-phone">
-                    <i class="fas fa-home"></i>
+                    <i class="fas fa-home" style="display: inline-block;"></i>
                     <span class="phone-text">На главную</span>
                 </a>
             </div>
@@ -38,7 +68,7 @@
             <div class="builder-header">
                 <h1>Конструктор схем электрощитов</h1>
                 <p class="subtitle">Создайте схему вашего электрощита и скачайте в формате изображения</p>
-                
+
                 <div class="controls-panel">
                     <div class="control-group">
                         <label for="rowsCount">Рядов:</label>
@@ -55,7 +85,25 @@
             </div>
 
             <div class="builder-container">
-                <!-- Панель инструментов -->
+                <div class="schema-canvas-container">
+                    <div class="canvas-header">
+                        <h3><i class="fas fa-th"></i> Схема электрощита</h3>
+                        <div class="canvas-info">
+                            <span>Кликните на ячейку чтобы разместить модуль</span>
+                        </div>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <table class="schema-table" id="schemaTable">
+                            <tbody id="gridBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" id="emptyState">
+                        <i class="fas fa-plug"></i>
+                        <p>Нажмите "Создать схему" чтобы начать</p>
+                    </div>
+                </div>
+
                 <div class="tools-panel" id="toolsPanel">
                     <div class="tool-section">
                         <h3><i class="fas fa-puzzle-piece"></i> Автоматы</h3>
@@ -86,20 +134,28 @@
                     <div class="tool-section">
                         <h3><i class="fas fa-palette"></i> Цвета</h3>
                         <div class="color-picker">
-                            <button class="color-btn" style="background: #ffffff;" data-color="#ffffff" data-text="Черный"></button>
-                            <button class="color-btn" style="background: #ffeb3b;" data-color="#ffeb3b" data-text="Черный"></button>
-                            <button class="color-btn" style="background: #4CAF50;" data-color="#4CAF50" data-text="Белый"></button>
-                            <button class="color-btn" style="background: #2196F3;" data-color="#2196F3" data-text="Белый"></button>
-                            <button class="color-btn" style="background: #ff9800;" data-color="#ff9800" data-text="Черный"></button>
-                            <button class="color-btn" style="background: #9C27B0;" data-color="#9C27B0" data-text="Белый"></button>
-                            <button class="color-btn" style="background: #795548;" data-color="#795548" data-text="Белый"></button>
-                            <button class="color-btn" style="background: #607D8B;" data-color="#607D8B" data-text="Белый"></button>
+                            <button class="color-btn" style="background: #ffffff;" data-color="#ffffff"
+                                data-text="Черный"></button>
+                            <button class="color-btn" style="background: #ffeb3b;" data-color="#ffeb3b"
+                                data-text="Черный"></button>
+                            <button class="color-btn" style="background: #4CAF50;" data-color="#4CAF50"
+                                data-text="Белый"></button>
+                            <button class="color-btn" style="background: #2196F3;" data-color="#2196F3"
+                                data-text="Белый"></button>
+                            <button class="color-btn" style="background: #ff9800;" data-color="#ff9800"
+                                data-text="Черный"></button>
+                            <button class="color-btn" style="background: #9C27B0;" data-color="#9C27B0"
+                                data-text="Белый"></button>
+                            <button class="color-btn" style="background: #795548;" data-color="#795548"
+                                data-text="Белый"></button>
+                            <button class="color-btn" style="background: #607D8B;" data-color="#607D8B"
+                                data-text="Белый"></button>
                         </div>
                     </div>
 
                     <div class="tool-section">
                         <h3><i class="fas fa-font"></i> Текст</h3>
-                        <textarea id="breakerText" placeholder="Введите описание модуля...&#10;Пример:&#10;• Розетки кухня (3 шт)&#10;• Вытяжка&#10;• Посудомоечная машина&#10;• Холодильник" rows="4"></textarea>
+                        <textarea id="breakerText" placeholder="Введите описание модуля..." rows="4"></textarea>
                     </div>
 
                     <div class="tool-section">
@@ -122,27 +178,6 @@
                                 <i class="fas fa-broom"></i> Очистить всё
                             </button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Холст для схемы -->
-                <div class="schema-canvas-container">
-                    <div class="canvas-header">
-                        <h3><i class="fas fa-th"></i> Схема электрощита</h3>
-                        <div class="canvas-info">
-                            <span>Кликните на ячейку чтобы разместить модуль</span>
-                        </div>
-                    </div>
-                    <div class="canvas-wrapper">
-                        <table class="schema-table" id="schemaTable">
-                            <tbody id="gridBody">
-                                <!-- Схема будет генерироваться здесь -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="empty-state" id="emptyState">
-                        <i class="fas fa-plug"></i>
-                        <p>Нажмите "Создать схему" чтобы начать</p>
                     </div>
                 </div>
             </div>
@@ -198,9 +233,10 @@
                             <span class="logo-city">Солнечногорск</span>
                         </div>
                     </a>
-                    <p class="footer-description">Профессиональные электромонтажные работы в Солнечногорске и Солнечногорском районе</p>
+                    <p class="footer-description">Профессиональные электромонтажные работы в Солнечногорске и
+                        Солнечногорском районе</p>
                 </div>
-                
+
                 <div class="footer-nav">
                     <h3>Контакты</h3>
                     <a href="tel:+79853312424" class="footer-link">
@@ -212,20 +248,32 @@
                         Ежедневно 8:00 - 21:00
                     </p>
                 </div>
-                
+
                 <div class="footer-nav">
                     <h3>Навигация</h3>
                     <a href="../index.html" class="footer-link">Главная страница</a>
                     <a href="index.html" class="footer-link">Конструктор схем</a>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>© <span id="currentYear"></span> Электромонтаж Солнечногорск. Все права защищены.</p>
             </div>
+        </div>
+        <div class="dg-signature">
+            <a href="https://digital-greatness.ru" target="_blank" rel="noopener" class="dg-signature-link">
+                <div class="dg-logo-circle">
+                    <span class="dg-logo">DG</span>
+                </div>
+                <div class="dg-info">
+                    <div class="dg-made-by">Создание сайта</div>
+                    <div class="dg-name">Digital Greatness</div>
+                </div>
+            </a>
         </div>
     </footer>
 
     <script src="../js/schema-builder.js"></script>
 </body>
+
 </html>
