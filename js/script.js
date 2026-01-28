@@ -3,7 +3,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAkeJZ9nAbpJ1c
 class Gallery {
     constructor() {
         this.currentPage = 0;
-        this.itemsPerPage = window.innerWidth < 768 ? 3 : 8;
+        this.itemsPerPage = window.innerWidth < 768 ? 1 : 8;
         this.photos = [];
         this.totalPages = 0;
         this.currentPhotoIndex = 0;
@@ -52,7 +52,7 @@ class Gallery {
         this.setupModal();
 
         window.addEventListener('resize', () => {
-            this.itemsPerPage = window.innerWidth < 768 ? 3 : 8;
+            this.itemsPerPage = window.innerWidth < 768 ? 1 : 8;
             this.totalPages = Math.ceil(this.photos.length / this.itemsPerPage);
             this.currentPage = 0;
             this.renderGallery();
@@ -408,3 +408,86 @@ document.addEventListener('DOMContentLoaded', function () {
     initHeaderEffect();
     initServiceCardsAnimation();
 });
+
+function initCalculator() {
+    const totalElement = document.getElementById('calcTotal');
+    const items = document.querySelectorAll('.calculator-item');
+    const quantityInputs = document.querySelectorAll('.calc-quantity-input');
+    const plusButtons = document.querySelectorAll('.calc-quantity-btn.plus');
+    const minusButtons = document.querySelectorAll('.calc-quantity-btn.minus');
+
+    function formatNumber(num) {
+        return new Intl.NumberFormat('ru-RU').format(num);
+    }
+
+    function calculateTotal() {
+        let total = 0;
+
+        items.forEach(item => {
+            const price = parseInt(item.getAttribute('data-price'));
+            const quantityInput = item.querySelector('.calc-quantity-input');
+            const quantity = parseInt(quantityInput.value) || 0;
+
+            total += price * quantity;
+        });
+
+        totalElement.textContent = formatNumber(total);
+    }
+
+    plusButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const input = this.parentNode.querySelector('.calc-quantity-input');
+            let value = parseInt(input.value) || 0;
+            const max = parseInt(input.getAttribute('max')) || 99;
+
+            if (value < max) {
+                value++;
+                input.value = value;
+                calculateTotal();
+            }
+        });
+    });
+
+    minusButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const input = this.parentNode.querySelector('.calc-quantity-input');
+            let value = parseInt(input.value) || 0;
+            const min = parseInt(input.getAttribute('min')) || 0;
+
+            if (value > min) {
+                value--;
+                input.value = value;
+                calculateTotal();
+            }
+        });
+    });
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', function () {
+            let value = parseInt(this.value) || 0;
+            const min = parseInt(this.getAttribute('min')) || 0;
+            const max = parseInt(this.getAttribute('max')) || 99;
+
+            if (value < min) {
+                value = min;
+                this.value = value;
+            } else if (value > max) {
+                value = max;
+                this.value = value;
+            }
+
+            calculateTotal();
+        });
+
+        input.addEventListener('change', function () {
+            if (!this.value || this.value === '' || parseInt(this.value) < 0) {
+                this.value = 0;
+                calculateTotal();
+            }
+        });
+    });
+
+    calculateTotal();
+}
+
+document.addEventListener('DOMContentLoaded', initCalculator);
