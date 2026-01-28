@@ -57,7 +57,9 @@ class Gallery {
             this.currentPage = 0;
             this.renderGallery();
             this.updateControls();
-            this.createDots();
+            if (window.innerWidth >= 768) {
+                this.createDots();
+            }
         });
     }
 
@@ -94,6 +96,10 @@ class Gallery {
 
     createDots() {
         this.dotsContainer.innerHTML = '';
+
+        if (window.innerWidth < 768) {
+            return;
+        }
 
         for (let i = 0; i < this.totalPages; i++) {
             const dot = document.createElement('button');
@@ -133,13 +139,15 @@ class Gallery {
         this.prevBtn.disabled = this.currentPage === 0;
         this.nextBtn.disabled = this.currentPage === this.totalPages - 1;
 
-        document.querySelectorAll('.gallery-dot').forEach((dot, index) => {
-            if (index === this.currentPage) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
-        });
+        if (window.innerWidth >= 768) {
+            document.querySelectorAll('.gallery-dot').forEach((dot, index) => {
+                if (index === this.currentPage) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
     }
 
     setupModal() {
@@ -220,20 +228,25 @@ class Gallery {
     updateModalImage() {
         if (!this.modalImage) return;
 
-        // Плавное исчезновение
-        this.modalImage.style.opacity = '0';
-
-        // Ждем завершения анимации исчезновения
-        setTimeout(() => {
-            this.modalImage.src = this.photos[this.currentPhotoIndex];
-
-            // Плавное появление
-            setTimeout(() => {
-                this.modalImage.style.opacity = '1';
-            }, 50);
-        }, 200);
+        this.modalImage.src = this.photos[this.currentPhotoIndex];
     }
 }
+
+function setupGalleryHeight() {
+    if (window.innerWidth < 768) {
+        const galleryWrapper = document.querySelector('.gallery-wrapper');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        galleryWrapper.classList.add('height-medium');
+
+        galleryItems.forEach(item => {
+            item.classList.add('height-medium');
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', setupGalleryHeight);
+window.addEventListener('resize', setupGalleryHeight);
 
 function initForm() {
     const form = document.getElementById('requestForm');
@@ -242,11 +255,9 @@ function initForm() {
 
     if (!form) return;
 
-    // Простое ограничение ввода для телефона (без маски)
     const phoneInput = document.getElementById('phone');
     if (phoneInput) {
         phoneInput.addEventListener('input', function () {
-            // Ограничиваем длину до 20 символов
             if (this.value.length > 20) {
                 this.value = this.value.substring(0, 20);
             }
@@ -268,7 +279,6 @@ function initForm() {
             return;
         }
 
-        // Простая проверка телефона - должен быть хотя бы 5 цифр
         const digitCount = (formData.phone.match(/\d/g) || []).length;
         if (digitCount < 5) {
             alert('Пожалуйста, введите корректный номер телефона (минимум 5 цифр)');
@@ -280,7 +290,6 @@ function initForm() {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
         submitBtn.disabled = true;
 
-        // В точности как в оригинальном скрипте
         setTimeout(async () => {
             try {
                 await fetch(APPS_SCRIPT_URL, {
@@ -300,7 +309,6 @@ function initForm() {
                 }, 4000);
 
             } catch (error) {
-                // Даже при ошибке показываем успех пользователю
                 successModal.style.display = 'block';
                 form.reset();
 
@@ -389,6 +397,7 @@ function initServiceCardsAnimation() {
         observer.observe(card);
     });
 }
+
 function initCurrentYear() {
     const currentYear = new Date().getFullYear();
     const yearElements = document.querySelectorAll('.footer-bottom p');
@@ -398,11 +407,9 @@ function initCurrentYear() {
 }
 
 document.getElementById('currentYear').textContent = new Date().getFullYear();
+
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('⚡ Сайт загружен');
-
     new Gallery();
-
     initForm();
     initSmoothScroll();
     initHeaderEffect();
