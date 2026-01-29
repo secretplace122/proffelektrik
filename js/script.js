@@ -9,6 +9,7 @@ class Gallery {
         this.currentPhotoIndex = 0;
         this.touchStartX = 0;
         this.touchEndX = 0;
+        this.isSwiping = false;
 
         this.grid = document.getElementById('galleryGrid');
         this.prevBtn = document.getElementById('prevBtn');
@@ -50,6 +51,7 @@ class Gallery {
         this.setupControls();
         this.updateControls();
         this.setupModal();
+        this.setupSwipeForGallery();
 
         window.addEventListener('resize', () => {
             this.itemsPerPage = window.innerWidth < 768 ? 1 : 8;
@@ -147,6 +149,49 @@ class Gallery {
                     dot.classList.remove('active');
                 }
             });
+        }
+    }
+
+    setupSwipeForGallery() {
+        if (window.innerWidth >= 768) return;
+
+        const galleryWrapper = document.querySelector('.gallery-wrapper');
+        
+        galleryWrapper.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+            this.isSwiping = false;
+        }, { passive: true });
+
+        galleryWrapper.addEventListener('touchmove', (e) => {
+            this.isSwiping = true;
+        }, { passive: true });
+
+        galleryWrapper.addEventListener('touchend', (e) => {
+            if (!this.isSwiping) return;
+            
+            this.touchEndX = e.changedTouches[0].screenX;
+            this.handleGallerySwipe();
+        }, { passive: true });
+    }
+
+    handleGallerySwipe() {
+        const swipeThreshold = 50;
+        const diff = this.touchStartX - this.touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                if (this.currentPage < this.totalPages - 1) {
+                    this.currentPage++;
+                    this.renderGallery();
+                    this.updateControls();
+                }
+            } else {
+                if (this.currentPage > 0) {
+                    this.currentPage--;
+                    this.renderGallery();
+                    this.updateControls();
+                }
+            }
         }
     }
 
