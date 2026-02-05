@@ -1506,3 +1506,144 @@ img {
 .gallery-wrapper .gallery-item.height-xlarge {
     height: 460px !important;
 }
+
+.articles-section {
+    padding: 50px 0;
+    background: #f8f9fa;
+}
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.article-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    gap: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.article-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-color: #FF9800;
+}
+
+.article-icon {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    background: linear-gradient(135deg, #FF9800, #FF5722);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.article-icon i {
+    color: white;
+    font-size: 24px;
+}
+
+.article-content {
+    flex: 1;
+}
+
+.article-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+    line-height: 1.3;
+}
+
+.article-excerpt {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.article-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #FF9800;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.article-link:hover {
+    color: #FF5722;
+    gap: 12px;
+}
+
+.article-link i {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.article-link:hover i {
+    transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+    .articles-section {
+        padding: 40px 0;
+    }
+
+    .articles-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .article-card {
+        padding: 25px;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .article-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+    }
+
+    .article-icon i {
+        font-size: 20px;
+    }
+
+    .article-title {
+        font-size: 18px;
+    }
+
+    .article-excerpt {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .articles-grid {
+        gap: 15px;
+    }
+
+    .article-card {
+        padding: 20px;
+    }
+
+    .article-title {
+        font-size: 17px;
+    }
+}
