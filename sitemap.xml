@@ -26,31 +26,10 @@
     </url>
 
     <url>
-        <loc>https://proffelektrik.ru/#услуги</loc>
+        <loc>https://proffelektrik.ru/#form</loc>
         <lastmod>2026-02-05</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://proffelektrik.ru/#галерея</loc>
-        <lastmod>2026-02-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://proffelektrik.ru/#форма</loc>
-        <lastmod>2026-02-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://proffelektrik.ru/#контакты</loc>
-        <lastmod>2026-02-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
     </url>
 
     <url>
@@ -60,7 +39,6 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Статьи из раздела "Полезные статьи" -->
     <url>
         <loc>https://proffelektrik.ru/blog/электропроводка-в-квартире.html</loc>
         <lastmod>2026-02-05</lastmod>
